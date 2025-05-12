@@ -15,6 +15,6 @@ COPY . .
 
 # Expose the Sinatra default port
 EXPOSE 4567
-
+EXPOSE 80
 # Command to run the Sinatra server
-CMD ["ruby", "server.rb", "-o", "0.0.0.0"]
+CMD ["ruby", "server.rb", "-p","80", "-o", "0.0.0.0"]
