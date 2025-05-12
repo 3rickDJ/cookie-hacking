@@ -3,12 +3,13 @@ require 'sinatra'
 set :bind, ENV.fetch('HOST', 'localhost')
 set :port, ENV.fetch('PORT', 4567)
 set :environment, ENV.fetch('ENV', :development).to_sym
-set :protection, {
-      host_authorization: {
-          permitted_hosts: ENV.fetch("ALLOWED_HOSTS", "localhost").split(","),
-              message: "Host not allowed 🐳"
-      }
-}
+set :host_authorization, { permitted_hosts: [] }
+# set :protection, {
+#       host_authorization: {
+#           permitted_hosts: ENV.fetch("ALLOWED_HOSTS", "localhost").split(","),
+#               message: "Host not allowed 🐳"
+#       }
+# }
 
 
 # Route to set a cookie
