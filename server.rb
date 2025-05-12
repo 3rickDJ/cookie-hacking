@@ -2,14 +2,15 @@ require 'sinatra'
 
 set :bind, ENV.fetch('HOST', 'localhost')
 set :port, ENV.fetch('PORT', 4567)
-set :environment, ENV.fetch('ENV', :development).to_sym
-set :host_authorization, { permitted_hosts: [] }
-# set :protection, {
-#       host_authorization: {
-#           permitted_hosts: ENV.fetch("ALLOWED_HOSTS", "localhost").split(","),
-#               message: "Host not allowed 🐳"
-#       }
-# }
+# this env is automatically set by ruby? idk, but it is
+# set :environment, ENV.fetch('APP_ENV', :development).to_sym
+if ENV['APP_ENV'] == 'production'
+  p "Running in production mode"
+  set :host_authorization, { permitted_hosts: ENV.fetch("ALLOWED_HOSTS").split(",") }
+else
+  p "Running in #{settings.environment} mode"
+  p "Allowed hosts: #{settings.host_authorization[:permitted_hosts].inspect}"
+end
 
 
 # Route to set a cookie
