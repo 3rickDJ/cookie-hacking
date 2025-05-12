@@ -10,15 +10,42 @@ This is a simple Proof of Concept (PoC) to help you understand how HTTP **cookie
 
 ```bash
 gem install sinatra
-```
+````
 
 ### 2. Run the server
+
+#### ▶️ In development (default)
 
 ```bash
 ruby server.rb
 ```
 
-The app will be available at `http://localhost:4567`
+#### ▶️ In production (with environment variables)
+
+**Fish shell:**
+
+```fish
+set -x APP_ENV production
+set -x ALLOWED_HOSTS erickdjm.xyz,www.erickdjm.xyz
+ruby server.rb
+```
+
+**Or using `env` inline:**
+
+```bash
+env APP_ENV=production ALLOWED_HOSTS=erickdjm.xyz ruby server.rb
+```
+
+#### ▶️ In deployment (e.g., Coolify)
+
+Add the following environment variables in the dashboard:
+
+```env
+APP_ENV=production
+ALLOWED_HOSTS=erickdjm.xyz,www.erickdjm.xyz
+```
+
+> The app will be available at `http://localhost:4567` or your production domain.
 
 ---
 
@@ -28,7 +55,8 @@ The app will be available at `http://localhost:4567`
 
 Sets a cookie named `username` with the value `"Erick"`.
 
-- Server response header:
+* Server response header:
+
   ```
   Set-Cookie: username=Erick; path=/; max-age=2592000
   ```
@@ -37,15 +65,21 @@ Sets a cookie named `username` with the value `"Erick"`.
 
 Reads the `username` cookie from the incoming request and responds with:
 
-- If cookie is present:
+* If cookie is present:
+
   ```
   Hello again, Erick!
   ```
 
-- If cookie is missing:
+* If cookie is missing:
+
   ```
   No cookie found!
   ```
+
+### ➤ `GET /set2` and `GET /get2`
+
+These routes handle an additional cookie named `cuk2`.
 
 ---
 
@@ -62,8 +96,6 @@ pip install httpie
 ```bash
 http -v GET http://localhost:4567/set
 ```
-
-You’ll see the `Set-Cookie` header in the response.
 
 ### 2. Manually send the cookie
 
@@ -82,21 +114,24 @@ http --session=cookies GET http://localhost:4567/get
 
 ## 🧠 What You'll Learn
 
-| Concept              | Example                                        |
-|----------------------|------------------------------------------------|
-| Setting cookies      | via `response.set_cookie` in Sinatra           |
-| Reading cookies      | via `request.cookies`                          |
-| Manual client send   | using HTTP headers like `Cookie: name=value`   |
-| Automatic send/store | using HTTPie session files                     |
+| Concept              | Example                                      |
+| -------------------- | -------------------------------------------- |
+| Setting cookies      | via `response.set_cookie` in Sinatra         |
+| Reading cookies      | via `request.cookies`                        |
+| Manual client send   | using HTTP headers like `Cookie: name=value` |
+| Automatic send/store | using HTTPie session files                   |
+| Environment config   | dynamic setup via `ENV['APP_ENV']`           |
+| Host protection      | via `set :host_authorization` in Sinatra     |
 
 ---
 
 ## 🚀 Extend This PoC
 
-- Set multiple cookies (e.g., `theme`, `language`)
-- Use `HttpOnly`, `Secure`, `Expires` options
-- Simulate login/session handling
-- Add a logout route to delete cookies
+* Set multiple cookies (e.g., `theme`, `language`)
+* Use `HttpOnly`, `Secure`, `Expires` options
+* Simulate login/session handling
+* Add a logout route to delete cookies
+* Dockerize the app and deploy it behind a CDN (e.g., Cloudflare)
 
 ---
 
@@ -105,7 +140,7 @@ http --session=cookies GET http://localhost:4567/get
 To remove session files created by HTTPie:
 
 ```bash
-rm ~/snap/httpie/474/.config/httpie
+rm -r ~/.config/httpie/sessions/*
 ```
 
 ---
