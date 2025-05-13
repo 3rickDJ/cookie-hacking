@@ -6,7 +6,7 @@ set :port, ENV.fetch('PORT', 4567)
 # set :environment, ENV.fetch('APP_ENV', :development).to_sym
 if ENV['APP_ENV'] == 'production'
   p "Running in production mode"
-  set :host_authorization, { permitted_hosts: ENV.fetch("ALLOWED_HOSTS").split(",") }
+  set :host_authorization, { permitted_hosts: ENV.fetch("ALLOWED_HOSTS").split(",") << "localhost"  }
 else
   p "Running in #{settings.environment} mode"
   p "Allowed hosts: #{settings.host_authorization[:permitted_hosts].inspect}"
