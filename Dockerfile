@@ -9,6 +9,8 @@ WORKDIR /app
 
 # Install dependencies
 RUN gem install rackup puma sinatra
+RUN apk add wget
+RUN apk add curl
 
 # Copy the rest of the application code
 COPY . .
